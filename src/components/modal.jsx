@@ -7,13 +7,12 @@ import { Button, Modal, ModalHeader, ModalBody, ModalFooter } from 'reactstrap';
 import { setModalStatusAndActiondata, updateOrderDetailsRequest } from '../store/actions';
 function ModalComponent() {
     const dispatch = useDispatch()
-
     const reasons = [{ label: "Missing Product", id: 1 }, { label: "Quantity is not same", id: 2 }, { label: "Price is not same", id: 3 }, { label: "others", id: 4 }]
 
     const modalStatus = useSelector(state => state?.ordersReducer?.modalStatus);
     const modalActionData = useSelector(state => state?.ordersReducer?.modalActionData);
-    console.log('modalActionData', modalActionData);
     const modalType = useSelector(state => state?.ordersReducer?.modalType);
+    
     const [counter, setCounter] = useState(0)
     const [price, setPrice] = useState(modalActionData?.price || 0)
     const [selectedRreason, setSelectedReason] = useState(0)
@@ -27,15 +26,16 @@ function ModalComponent() {
     const handleIncrement = () => {
         setCounter(counter + 1)
     }
-
-    useEffect(() => {
-        modalActionData?.quantity && setCounter(modalActionData?.quantity || 0)
-        modalActionData?.price && setPrice(modalActionData?.price || 0)
-    }, [modalActionData])
     const handleDecrement = () => {
         if (counter > 0)
             setCounter(counter - 1)
     }
+    
+    useEffect(() => {
+        modalActionData?.quantity && setCounter(modalActionData?.quantity)
+        modalActionData?.price && setPrice(modalActionData?.price)
+    }, [modalActionData])
+    
     const handleUpdate = () => {
         const modalActionDataC = {
             ...modalActionData,
@@ -45,14 +45,13 @@ function ModalComponent() {
         console.log('handleApproval', modalActionDataC);
         dispatch(updateOrderDetailsRequest(modalActionDataC))
     }
+    
     return (
         <div>
 
             <Modal isOpen={modalStatus && modalActionData} >
                 {modalType === 'ApprovalStatus' ? <>
-
                     <div style={{ textAlign: "right" }} onClick={() => dispatch(setModalStatusAndActiondata(undefined, false, ''))}>X</div>
-
                     <ModalHeader >Missing Product</ModalHeader>
                     <ModalBody>
                         {`is ${modalActionData.productName} urgent ?`}
@@ -95,7 +94,6 @@ function ModalComponent() {
                                             justifyContent: 'center',
                                             position: 'absolute',
                                         }}>
-
                                             <button style={{
                                                 fontSize: '60%',
                                                 position: 'relative',
@@ -124,7 +122,6 @@ function ModalComponent() {
                                 </div><p>s</p>
                                 <h1 className="infoElementHeading" >{price * counter}</h1>
                             </div>
-
                         </div>
                         <hr />
                         <div>
