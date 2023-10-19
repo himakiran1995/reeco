@@ -20,7 +20,6 @@ const HomePage = () => {
     const totalBill = orderDetails.map(x => x.price * x.quantity).reduce((total, currentValue) => total + currentValue, 0)
     const filteredOrders = (searchKey && searchKey !== '') ? orderDetails.filter(x => (x.productName.toLowerCase().includes(searchKey.toLowerCase()) || (x.brandName.toLowerCase().startsWith(searchKey.toLowerCase())))) : orderDetails;
 
-    console.log('orderDetails', orderDetails, totalBill);
     const getstatusButton = (status) => {
         switch (status) {
             case 'APPROVED':
